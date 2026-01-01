@@ -1,0 +1,20 @@
+{
+  "name_price_anonymized_xlsx": "name_price_anonymized.xlsx",
+  "neo4j_export_dir": "neo4j_export",
+  "media_result_xlsx": "media_result.xlsx",
+  "splits_kfold_json": "STEP0_splits_kfold.json",
+  "splits_groupkfold_json": "STEP0_splits_groupkfold_supplier.json",
+  "fold_textemb_cache_npz": "STEP0_fold_textemb_cache.npz",
+  "product_textemb_csv": "STEP0_product_textemb.csv",
+  "product_textemb_npz": "STEP0_product_textemb.npz",
+  "supplier_order_json": "supplier_order.json",
+  "step0_cache_files": [
+    "STEP0_product_similarity_graph_edges.csv",
+    "STEP0_product_competitor_summary.csv",
+    "STEP0_completion_product_missing_apps.csv",
+    "STEP0_completion_product_missing_srcs.csv"
+  ],
+  "n_splits": 5,
+  "random_state": 42,
+  "min_label_freq": 1
+}
