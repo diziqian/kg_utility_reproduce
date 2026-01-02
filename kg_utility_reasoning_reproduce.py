@@ -813,10 +813,10 @@ def main():
             )
 
     # Export paper tables
-    if hasattr(core, "export_tables_1_to_11_and_appendices_3_4_5_6"):
-        core.export_tables_1_to_11_and_appendices_3_4_5_6(str(args.out_dir), decimals=3)
+    if hasattr(core, "export_tables_1_to_11_and_appendices_1_to_5"):
+        core.export_tables_1_to_11_and_appendices_1_to_5(str(args.out_dir), decimals=3)
     else:
-        raise RuntimeError("Core missing export_tables_1_to_11_and_appendices_3_4_5_6()")
+        raise RuntimeError("Core missing export_tables_1_to_11_and_appendices_1_to_5()")
 
     print(f"[OK] Reproduce run finished. Outputs at: {os.path.abspath(args.out_dir)}")
 

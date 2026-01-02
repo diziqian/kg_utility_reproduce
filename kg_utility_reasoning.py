@@ -86,9 +86,9 @@ NEO4J_USER = ""
 NEO4J_PASS = ""
 NEO4J_DB = ""
 
-EXCEL_PATH = "anymous/name_price_anonymized.xlsx"
-MEDIA_PATH = "anymous/media_result.xlsx"  # optional; used for demand heat
-OUTPUT_PATH = "result_kg_reproduce"
+EXCEL_PATH = "./anymous/name_price_anonymized.xlsx"
+MEDIA_PATH = "./media_num/media_result.xlsx"  # optional; used for demand heat
+OUTPUT_PATH = "./result_kg_reproduce"
 os.makedirs(OUTPUT_PATH, exist_ok=True)
 
 PRICE_COL = "price"
@@ -4600,7 +4600,7 @@ def summarize_mechanism_chain_outputs(out_dir: str) -> pd.DataFrame:
     lines.append("This summary aggregates mediation / DML outputs. Interpret as mechanism-consistent evidence, not mechanism identification.\n")
 
     for lvl in ["supplier", "product"]:
-        sub = df_sum[df_sum["dimension"] == lvl]
+        sub = df_sum[df_sum["level"] == lvl]
         if sub.empty:
             continue
         lines.append(f"## {lvl}\n")
@@ -5423,7 +5423,7 @@ def _export_sheet_and_csv(
     os.makedirs(csv_dir, exist_ok=True)
     df.to_csv(os.path.join(csv_dir, csv_name), index=False, encoding="utf-8-sig")
 
-def export_tables_1_to_11_and_appendices_3_4_5_6(
+def export_tables_1_to_11_and_appendices_1_to_5(
         out_dir: str,
         decimals: int = 3,
         excel_name: str = "paper_tables_v7_all_with_app6.xlsx",
@@ -5710,11 +5710,9 @@ def export_tables_1_to_11_and_appendices_3_4_5_6(
         export(writer, "Table11_keyfactor", t11, "Table11_keyfactor.csv")
 
         # Appendix Table 3
-        export(writer, "AppendixTable3_var_stats", df_var_stats.copy(), "AppendixTable3_var_stats.csv")
-
+        # NOTE: deferred export for AppendixTable3_var_stats (enforce ordered sheet layout)
         # Appendix Table 4
-        export(writer, "AppendixTable4_mech_chain", df_chain.copy(), "AppendixTable4_mech_chain.csv")
-
+        # NOTE: deferred export for AppendixTable4_mech_chain (enforce ordered sheet layout)
         # Appendix Table 5 (GroupKFold)
         dfg = df_step5[df_step5["cv"] == "GroupKFold"].copy()
 
@@ -5738,9 +5736,8 @@ def export_tables_1_to_11_and_appendices_3_4_5_6(
             rows.append({"metric": m, "mean": float(r["mean"].iloc[0]), "std": float(r["std"].iloc[0])})
 
         app5 = pd.DataFrame(rows)
-        export(writer, "AppendixTable5_groupkfold", app5, "AppendixTable5_groupkfold.csv")
-
-        # Appendix Table 2 (KG ontology/coverage statistics on priced subgraph)
+        # NOTE: deferred export for AppendixTable5_groupkfold (enforce ordered sheet layout)
+        # Appendix Table 6 (KG ontology/coverage statistics on priced subgraph)
         price_keys = set(
             ("PROD::" + df_price_rows["name"].astype(str) + "||SUP::" + df_price_rows["supplier"].astype(str)).tolist()
         )
@@ -5787,6 +5784,62 @@ def export_tables_1_to_11_and_appendices_3_4_5_6(
         deg_app = five_num(app_per_prod)
         deg_src = five_num(src_per_prod)
 
+        # Appendix Table 1 (Detailed ontology specification on priced subgraph)
+        # Note: DataProduct is represented by supplier-resolved prod_key = PROD::<name>||SUP::<supplier>,
+        #       matching the unit of observation in the benchmarking sample.
+        def _fmt_deg(d: dict) -> str:
+            return f'{d["mean"]:.3f}; {d["P25"]:.0f}/{d["P50"]:.0f}/{d["P75"]:.0f}; {d["max"]:.0f}'
+
+        # provide_data: Supplier -> DataProduct
+        deg_provide_out = deg_supplier
+        deg_provide_in = five_num(df_edges.groupby("prod_key")["supplier"].nunique())
+
+        # source_industry: src_IndustryCategory -> DataProduct
+        _src_expl = df_edges[["prod_key", "src_list_parsed"]].explode("src_list_parsed")
+        _src_expl = _src_expl.dropna()
+        _src_expl = _src_expl[_src_expl["src_list_parsed"].astype(str).str.len() > 0]
+        deg_src_out = five_num(_src_expl.groupby("src_list_parsed")["prod_key"].nunique())
+        deg_src_in = deg_src
+
+        # applied_to: DataProduct -> app_IndustryCategory
+        _app_expl = df_edges[["prod_key", "app_list_parsed"]].explode("app_list_parsed")
+        _app_expl = _app_expl.dropna()
+        _app_expl = _app_expl[_app_expl["app_list_parsed"].astype(str).str.len() > 0]
+        deg_app_out = deg_app
+        deg_app_in = five_num(_app_expl.groupby("app_list_parsed")["prod_key"].nunique())
+
+        app1 = pd.DataFrame(
+            [
+                {
+                    "Relation (r)": "provide_data",
+                    "Schema": "Supplier → DataProduct",
+                    "#Edges": e_provide,
+                    "#Start": n_suppliers,
+                    "#End": n_products,
+                    "Start out-degree (mean; P25/P50/P75; max)": _fmt_deg(deg_provide_out),
+                    "End in-degree (mean; P25/P50/P75; max)": _fmt_deg(deg_provide_in),
+                },
+                {
+                    "Relation (r)": "source_industry",
+                    "Schema": "src_IndustryCategory → DataProduct",
+                    "#Edges": e_src,
+                    "#Start": n_src,
+                    "#End": n_products,
+                    "Start out-degree (mean; P25/P50/P75; max)": _fmt_deg(deg_src_out),
+                    "End in-degree (mean; P25/P50/P75; max)": _fmt_deg(deg_src_in),
+                },
+                {
+                    "Relation (r)": "applied_to",
+                    "Schema": "DataProduct → app_IndustryCategory",
+                    "#Edges": e_app,
+                    "#Start": n_products,
+                    "#End": n_app,
+                    "Start out-degree (mean; P25/P50/P75; max)": _fmt_deg(deg_app_out),
+                    "End in-degree (mean; P25/P50/P75; max)": _fmt_deg(deg_app_in),
+                },
+            ]
+        )
+        # NOTE: deferred export for AppendixTable1_ontology_spec (enforce ordered sheet layout)
         app6 = pd.DataFrame(
             [
                 {"Panel": "A. Node coverage", "Statistic": "Products (priced pairs)", "Value": n_products},
@@ -5802,21 +5855,33 @@ def export_tables_1_to_11_and_appendices_3_4_5_6(
                 {
                     "Panel": "C. Degree & label sparsity",
                     "Statistic": "Products per supplier (mean; P25/P50/P75; max)",
-                    "Value": f'{deg_supplier["mean"]:.3f}; {deg_supplier["P25"]:.0f}/{deg_supplier["P50"]:.0f}/{deg_supplier["P75"]:.0f}; {deg_supplier["max"]:.0f}',
+                    "Value": f'{deg_supplier["mean"]:.2f}; {deg_supplier["P25"]:.0f}/{deg_supplier["P50"]:.0f}/{deg_supplier["P75"]:.0f}; {deg_supplier["max"]:.0f}',
                 },
                 {
                     "Panel": "C. Degree & label sparsity",
                     "Statistic": "App labels per product (mean; P25/P50/P75; max)",
-                    "Value": f'{deg_app["mean"]:.3f}; {deg_app["P25"]:.0f}/{deg_app["P50"]:.0f}/{deg_app["P75"]:.0f}; {deg_app["max"]:.0f}',
+                    "Value": f'{deg_app["mean"]:.2f}; {deg_app["P25"]:.0f}/{deg_app["P50"]:.0f}/{deg_app["P75"]:.0f}; {deg_app["max"]:.0f}',
                 },
                 {
                     "Panel": "C. Degree & label sparsity",
                     "Statistic": "Src labels per product (mean; P25/P50/P75; max)",
-                    "Value": f'{deg_src["mean"]:.3f}; {deg_src["P25"]:.0f}/{deg_src["P50"]:.0f}/{deg_src["P75"]:.0f}; {deg_src["max"]:.0f}',
+                    "Value": f'{deg_src["mean"]:.2f}; {deg_src["P25"]:.0f}/{deg_src["P50"]:.0f}/{deg_src["P75"]:.0f}; {deg_src["max"]:.0f}',
                 },
             ]
         )
+        # ---------------------------
+        # Appendix tables (ordered): Appendix Table 1–5
+        # ---------------------------
+        export(writer, "AppendixTable1_ontology_spec", app1, "AppendixTable1_ontology_spec.csv")
         export(writer, "AppendixTable2_KG_stats", app6, "AppendixTable2_KG_stats.csv")
+
+        # Appendix Table 3
+        export(writer, "AppendixTable3_var_stats", df_var_stats.copy(), "AppendixTable3_var_stats.csv")
+
+        # Appendix Table 4
+        export(writer, "AppendixTable4_mech_chain", df_chain.copy(), "AppendixTable4_mech_chain.csv")
+
+        export(writer, "AppendixTable5_groupkfold", app5, "AppendixTable5_groupkfold.csv")
 
     print(f"[export_tables] Excel: {excel_path}")
     print(f"[export_tables] CSVs:  {csv_dir}")
@@ -5859,8 +5924,7 @@ def main():
         metapath_heat_teleport_mass=float(args.metapath_heat_teleport_mass),
     )
 
-    export_tables_1_to_11_and_appendices_3_4_5_6(args.out, decimals=3)
+    export_tables_1_to_11_and_appendices_1_to_5(args.out, decimals=3)
 
 if __name__ == "__main__":
     main()
-
