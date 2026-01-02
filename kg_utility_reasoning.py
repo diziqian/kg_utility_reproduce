@@ -4554,7 +4554,7 @@ def summarize_mechanism_chain_outputs(out_dir: str) -> pd.DataFrame:
             dir_ci = med.get("direct_CI95", [None, None])
 
             rows.append({
-                "level": lvl,
+                "dimension": lvl,
                 "method": "mediation",
                 "term": "indirect_effect (a*b)",
                 "estimate": ind,
@@ -4564,7 +4564,7 @@ def summarize_mechanism_chain_outputs(out_dir: str) -> pd.DataFrame:
                 "notes": "Mechanism-consistent evidence only (not causal identification).",
             })
             rows.append({
-                "level": lvl,
+                "dimension": lvl,
                 "method": "mediation",
                 "term": "direct_effect (c')",
                 "estimate": dir_,
@@ -4577,7 +4577,7 @@ def summarize_mechanism_chain_outputs(out_dir: str) -> pd.DataFrame:
         # ---- DML ----
         if isinstance(dml, dict):
             rows.append({
-                "level": lvl,
+                "dimension": lvl,
                 "method": "dml",
                 "term": "dml_slope",
                 "estimate": dml.get("dml_slope", None),
@@ -4600,7 +4600,7 @@ def summarize_mechanism_chain_outputs(out_dir: str) -> pd.DataFrame:
     lines.append("This summary aggregates mediation / DML outputs. Interpret as mechanism-consistent evidence, not mechanism identification.\n")
 
     for lvl in ["supplier", "product"]:
-        sub = df_sum[df_sum["level"] == lvl]
+        sub = df_sum[df_sum["dimension"] == lvl]
         if sub.empty:
             continue
         lines.append(f"## {lvl}\n")
@@ -5740,7 +5740,7 @@ def export_tables_1_to_11_and_appendices_3_4_5_6(
         app5 = pd.DataFrame(rows)
         export(writer, "AppendixTable5_groupkfold", app5, "AppendixTable5_groupkfold.csv")
 
-        # Appendix Table 6 (KG ontology/coverage statistics on priced subgraph)
+        # Appendix Table 2 (KG ontology/coverage statistics on priced subgraph)
         price_keys = set(
             ("PROD::" + df_price_rows["name"].astype(str) + "||SUP::" + df_price_rows["supplier"].astype(str)).tolist()
         )
@@ -5802,21 +5802,21 @@ def export_tables_1_to_11_and_appendices_3_4_5_6(
                 {
                     "Panel": "C. Degree & label sparsity",
                     "Statistic": "Products per supplier (mean; P25/P50/P75; max)",
-                    "Value": f'{deg_supplier["mean"]:.2f}; {deg_supplier["P25"]:.0f}/{deg_supplier["P50"]:.0f}/{deg_supplier["P75"]:.0f}; {deg_supplier["max"]:.0f}',
+                    "Value": f'{deg_supplier["mean"]:.3f}; {deg_supplier["P25"]:.0f}/{deg_supplier["P50"]:.0f}/{deg_supplier["P75"]:.0f}; {deg_supplier["max"]:.0f}',
                 },
                 {
                     "Panel": "C. Degree & label sparsity",
                     "Statistic": "App labels per product (mean; P25/P50/P75; max)",
-                    "Value": f'{deg_app["mean"]:.2f}; {deg_app["P25"]:.0f}/{deg_app["P50"]:.0f}/{deg_app["P75"]:.0f}; {deg_app["max"]:.0f}',
+                    "Value": f'{deg_app["mean"]:.3f}; {deg_app["P25"]:.0f}/{deg_app["P50"]:.0f}/{deg_app["P75"]:.0f}; {deg_app["max"]:.0f}',
                 },
                 {
                     "Panel": "C. Degree & label sparsity",
                     "Statistic": "Src labels per product (mean; P25/P50/P75; max)",
-                    "Value": f'{deg_src["mean"]:.2f}; {deg_src["P25"]:.0f}/{deg_src["P50"]:.0f}/{deg_src["P75"]:.0f}; {deg_src["max"]:.0f}',
+                    "Value": f'{deg_src["mean"]:.3f}; {deg_src["P25"]:.0f}/{deg_src["P50"]:.0f}/{deg_src["P75"]:.0f}; {deg_src["max"]:.0f}',
                 },
             ]
         )
-        export(writer, "AppendixTable6_KG_stats", app6, "AppendixTable6_KG_stats.csv")
+        export(writer, "AppendixTable2_KG_stats", app6, "AppendixTable2_KG_stats.csv")
 
     print(f"[export_tables] Excel: {excel_path}")
     print(f"[export_tables] CSVs:  {csv_dir}")
