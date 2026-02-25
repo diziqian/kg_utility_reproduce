@@ -1,6 +1,6 @@
-# Knowledge Graph-Driven Price Benchmarking for API-Based Data Products: Reproduction Package
+# API-Based Data Product Pricing (KG): Reproduction Package
 
-This repository provides **reproducible code and anonymized data** for analyzing and reasoning about **Knowledge Graph-Driven Price Benchmarking for API-Based Data Products** using **Knowledge Graph (KG)** techniques.
+This repository provides **reproducible code and anonymized data** for analyzing and reasoning about **API-based data-product pricing** using **Knowledge Graph (KG)** techniques.
 
 ---
 
