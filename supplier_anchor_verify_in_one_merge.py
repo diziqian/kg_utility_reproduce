@@ -80,7 +80,6 @@ except Exception:
     sm = None
 
 # Reuse the original script as the base workflow.
-sys.path.append("/mnt/data")
 import supplier_fe_market_power_indications as base
 
 

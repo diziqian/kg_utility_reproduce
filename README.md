@@ -6,7 +6,7 @@ This repository provides **reproducible code and anonymized data** for analyzing
 
 ## 1. Project Overview
 
-This project investigates pricing mechanisms of API-based data products via **graph-based reasoning**. By modeling relationships among **products**, **suppliers**, and **industries**, the pipeline performs utility reasoning to support **benchmarking, interpretation, and prediction** of data-product prices.
+This project investigates pricing mechanisms of API-based data products via **graph-based reasoning**. By modeling relationships among **products**, **suppliers**, and **industries**, the pipeline performs utility reasoning to support **benchmarking, interpretation, and prediction** of data-product prices. The final results are in **result_kg_reproduce/table_merge**.
 
 ---
 
@@ -14,19 +14,21 @@ This project investigates pricing mechanisms of API-based data products via **gr
 
 ```text
 .
-├── anymous/                          # Anonymized datasets
-│   ├── neo4j_export/                 # Anonymized graph export from Neo4j (nodes & edges)
-│   ├── name_price_anonymized.xlsx    # Anonymized price data from data exchanges (research object)
-│   └── STEP0.*/                      # Intermediate variables and processed product descriptions
-├── result_kg_reproduce/              # Reproduction outputs
-│   ├── table_out/                    # Formatted output tables
-│   ├── paper_tables_csv/             # Raw CSV tables used in the paper
-│   └── paper_tables_v7_all_with_app6.xlsx  # Comprehensive summary table
-├── KG_reasoning_pic_4/               # Generated reasoning visualization figures (paper-ready)
-├── kg_utility_reasoning.py           # Main engine: KG-based analysis and reasoning
-├── kg_utility_reasoning_reproduce.py # Reproduction runner: recreate core results
-├── plt_kg_reasoning_pic.py           # Visualization runner: generate paper figures
-└── requirements.txt                  # Python dependencies
+├── anymous/                                # Anonymized datasets
+│   ├── neo4j_export/                       # Anonymized graph export from Neo4j (nodes & edges)
+│   ├── name_price_anonymized.xlsx          # Anonymized price data from data exchanges (research object)
+│   └── STEP0.*/                            # Intermediate variables and processed product descriptions
+├── result_kg_reproduce/                    # Reproduction outputs
+│   ├── table_out/                          # Formatted output tables
+│   ├── table_merge/                        # The final result directory
+│   └── Paper_All_Tables_Merged.xlsx        # Comprehensive summary table
+├── KG_reasoning_pic_4/                     # Generated reasoning visualization figures (paper-ready)
+├── kg_utility_reasoning.py                 # Main engine: KG-based analysis and reasoning
+├── kg_utility_reasoning_reproduce.py       # Reproduction runner: recreate core results
+├── supplier_anchor_verify_in_one_merge.py  # Supplier Anchor test and verified
+├── supplier_fe_market_power_indications.py # Supplier FE market power test and verified
+├── plt_kg_reasoning_pic.py                 # Visualization runner: generate paper figures
+└── requirements.txt                        # Python dependencies
 ```
 
 ---
