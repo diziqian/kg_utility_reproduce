@@ -4600,7 +4600,7 @@ def summarize_mechanism_chain_outputs(out_dir: str) -> pd.DataFrame:
     lines.append("This summary aggregates mediation / DML outputs. Interpret as mechanism-consistent evidence, not mechanism identification.\n")
 
     for lvl in ["supplier", "product"]:
-        sub = df_sum[df_sum["level"] == lvl]
+        sub = df_sum[df_sum["dimension"] == lvl]
         if sub.empty:
             continue
         lines.append(f"## {lvl}\n")
