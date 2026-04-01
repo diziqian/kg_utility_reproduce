@@ -21,12 +21,11 @@ This project investigates pricing mechanisms of API-based data products via **gr
 ├── result_kg_reproduce/                    # Reproduction outputs
 │   ├── table_out/                          # Formatted output tables
 │   ├── table_merge/                        # The final result directory
-│   └── Paper_All_Tables_Merged.xlsx        # Comprehensive summary table
-├── KG_reasoning_pic_4/                     # Generated reasoning visualization figures (paper-ready)
+│   ├── /Paper_All_Tables_Merged.xlsx       # Comprehensive summary table
+│   └──KG_reasoning_pic_4/                  # Generated reasoning visualization figures (paper-ready)
 ├── kg_utility_reasoning.py                 # Main engine: KG-based analysis and reasoning
 ├── kg_utility_reasoning_reproduce.py       # Reproduction runner: recreate core results
-├── supplier_anchor_verify_in_one_merge.py  # Supplier Anchor test and verified
-├── supplier_fe_market_power_indications.py # Supplier FE market power test and verified
+├── plt_price_distribution.py               # Visualization pridce distributuon: generate paper figures
 ├── plt_kg_reasoning_pic.py                 # Visualization runner: generate paper figures
 └── requirements.txt                        # Python dependencies
 ```
