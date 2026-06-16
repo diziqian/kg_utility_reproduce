@@ -6,7 +6,7 @@ import seaborn as sns
 import os
 
 PRICE_Path = './anymous/name_price_anonymized.xlsx'
-PIC_Des = './result_kg_reproduce/price_distribution_pic/'
+PIC_Des = './result_kg_reproduce/Figs/'
 
 
 def generate_academic_figures(file_path, output_dir):
@@ -86,7 +86,7 @@ def generate_academic_figures(file_path, output_dir):
     axes[1].set_ylabel('Frequency', fontsize=11)
 
     plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, 'combined_price_distribution.png'), dpi=300, bbox_inches='tight')
+    plt.savefig(os.path.join(output_dir, 'Fig2.png'), dpi=300, bbox_inches='tight')
     plt.close()
 
 

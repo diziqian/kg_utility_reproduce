@@ -17,12 +17,13 @@ This project investigates pricing mechanisms of API-based data products via **gr
 ├── anymous/                                # Anonymized datasets
 │   ├── neo4j_export/                       # Anonymized graph export from Neo4j (nodes & edges)
 │   ├── name_price_anonymized.xlsx          # Anonymized price data from data exchanges (research object)
+│   ├── name_price_all_anonymized.xlsx          # All Anonymized price (including zero price and duplicate products)
 │   └── STEP0.*/                            # Intermediate variables and processed product descriptions
 ├── result_kg_reproduce/                    # Reproduction outputs
 │   ├── table_out/                          # Formatted output tables
 │   ├── table_merge/                        # The final result directory
 │   ├── /Paper_All_Tables_Merged.xlsx       # Comprehensive summary table
-│   └──KG_reasoning_pic_4/                  # Generated reasoning visualization figures (paper-ready)
+│   └──Pics/                                # Generated Pics and Pics on reasoning visualization figures (paper-ready)
 ├── kg_utility_reasoning.py                 # Main engine: KG-based analysis and reasoning
 ├── kg_utility_reasoning_reproduce.py       # Reproduction runner: recreate core results
 ├── plt_price_distribution.py               # Visualization pridce distributuon: generate paper figures
