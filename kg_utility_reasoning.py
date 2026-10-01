@@ -131,6 +131,7 @@ def mlb_transform_no_warn(mlb: MultiLabelBinarizer, seqs) -> np.ndarray:
                 X[r, j] = 1.0
     return X
 
+
 def safe_ln(x: float) -> float:
     try:
         x = float(x)
@@ -160,7 +161,6 @@ def spearman_rho(x: np.ndarray, y: np.ndarray) -> float:
     if np.std(xr) == 0 or np.std(yr) == 0:
         return np.nan
     return float(np.corrcoef(xr, yr)[0, 1])
-
 
 
 def _prod_key(name: Any, supplier: Any) -> str:
