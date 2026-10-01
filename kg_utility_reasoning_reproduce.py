@@ -315,9 +315,9 @@ def build_appendix_tables(any_root: str, out_dir: str) -> Dict[str, str]:
 
     c1 = pd.DataFrame([
         {
-            'Stage': 'External KG API DataProduct universe',
+            'Stage': 'Broader KG API-listing universe',
             'Count': kg_total_products,
-            'Audit/source basis': 'Unique API DataProduct nodes in the anonymized Neo4j export after cleaning, de-duplication, anonymization, and KG instantiation.'
+            'Audit/source basis': 'Unique API listings retained after cleaning and de-duplication for KG construction.'
         },
         {
             'Stage': 'Raw price-file rows',
@@ -330,12 +330,12 @@ def build_appendix_tables(any_root: str, out_dir: str) -> Dict[str, str]:
             'Audit/source basis': 'Product name and supplier name are used as the uniqueness criterion.'
         },
         {
-            'Stage': 'Zero-price records removed',
+            'Stage': 'Zero-price listings removed',
             'Count': zero_price_records,
             'Audit/source basis': 'Records with price = 0; excluded because they do not represent positive paid API posted quotes.'
         },
         {
-            'Stage': 'Upper-tail observations removed',
+            'Stage': 'Upper-tail listings removed',
             'Count': upper_tail_removed,
             'Audit/source basis': 'Records priced at 300 RMB per call or above.'
         },
@@ -1911,7 +1911,7 @@ def build_appendix_c4_sample_comparison(any_root: str, out_dir: str):
     Rationale
     ---------
     The public pre-filter price file contains 559 rows / 555 unique price-observed
-    product-supplier pairs, but the 34 observations later excluded by price cleaning
+    product-supplier pairs, but the 34 listings later excluded by price cleaning
     deliberately use EXCLUDED_* audit placeholders and therefore are not intended to
     provide a canonical KG-node crosswalk.
 
@@ -1935,7 +1935,7 @@ def build_appendix_c4_sample_comparison(any_root: str, out_dir: str):
             final price-modeling sample                 521
             other KG listings                         6,165
 
-        The 6,165 observations outside the final sample comprise the 6,131 listings
+        The 6,165 listings outside the final sample comprise the 6,131 listings
         without standardizable posted-price information plus the 34 price-observed
         listings excluded by the stated price-cleaning rules.
 
@@ -1990,7 +1990,7 @@ def build_appendix_c4_sample_comparison(any_root: str, out_dir: str):
     if kg_n != 6686:
         raise RuntimeError(
             f'Appendix C.4 expected the broader KG universe to contain 6,686 '
-            f'API listing observations, but found {kg_n}.'
+            f'API listings, but found {kg_n}.'
         )
 
     for df, label in [(raw_price, 'name_price_all_anonymized.xlsx'),
@@ -2050,7 +2050,7 @@ def build_appendix_c4_sample_comparison(any_root: str, out_dir: str):
         )
 
     # Final 521 must map completely to the public KG. This is the only
-    # product-level crosswalk required for the structural comparison.
+    # listing-level crosswalk required for the structural comparison.
     dp_lookup = universe[['dp_id', 'name', 'supplier']].copy()
     final_mapped = final_unique.merge(
         dp_lookup,
@@ -2147,7 +2147,7 @@ def build_appendix_c4_sample_comparison(any_root: str, out_dir: str):
     if (len(final_group), len(other_group)) != (521, 6165):
         raise RuntimeError(
             'Appendix C.4 Panel B integrity check failed: expected '
-            f'521/6165 final/other observations, got '
+            f'521/6165 final/other listings, got '
             f'{len(final_group)}/{len(other_group)}.'
         )
 
