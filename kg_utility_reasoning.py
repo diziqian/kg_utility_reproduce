@@ -1314,7 +1314,7 @@ def build_tables(df: pd.DataFrame, out_dir: str) -> Dict[str,pd.DataFrame]:
     conditional_specs = [
         ('Supplier FE', base_core, 'Supplier FE'),
         ('Src FE', ['Supplier FE', 'Src FE'], 'Supplier FE + Src FE'),
-        ('App FE', ['Supplier FE', 'Src FE', 'App FE'], 'Supplier FE + Src FE+ App FE'),
+        ('App FE', ['Supplier FE', 'Src FE', 'App FE'], 'Supplier FE + Src FE + App FE'),
         ('Product', structural_base, 'Supplier FE + Src FE + App FE + Product'),
         ('Supply', structural_base + ['Supply'], 'Supplier FE + Src FE + App FE + Product + Supply'),
         ('Demand', structural_base + ['Demand'], 'Supplier FE + Src FE + App FE + Product + Demand'),
