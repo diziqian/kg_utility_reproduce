@@ -342,12 +342,12 @@ def build_appendix_tables(any_root: str, out_dir: str) -> Dict[str, str]:
         {
             'Stage': 'Final price-modeling sample',
             'Count': final_model_sample,
-            'Audit/source basis': 'Unique API products with positive normalized posted prices after cleaning.'
+            'Audit/source basis': 'Unique API listings with positive normalized posted prices after cleaning.'
         },
         {
             'Stage': 'Final sample matched back to KG',
             'Count': final_matched_to_kg,
-            'Audit/source basis': 'Final modeling records matched to the KG through anonymized product and supplier labels.'
+            'Audit/source basis': 'Paid API listings with positive normalized posted prices after cleaning.'
         },
     ])
 
