@@ -390,10 +390,10 @@ def build_appendix_tables(any_root: str, out_dir: str) -> Dict[str, str]:
         s = pd.Series(s, dtype=float)
         return f"{s.mean():.3f}; {int(s.quantile(0.25))}/{int(s.quantile(0.5))}/{int(s.quantile(0.75))}; {int(s.max())}"
     c3 = pd.DataFrame([
-        {'Panel':'A. Node coverage','Statistic':'Products (with price)','Value':len(priced_ids)},
-        {'Panel':'A. Node coverage','Statistic':'Suppliers (connected to priced products)','Value':priced_dp['supplier'].nunique()},
-        {'Panel':'A. Node coverage','Statistic':'src industries (connected to priced products)','Value':src_edges['start'].nunique()},
-        {'Panel':'A. Node coverage','Statistic':'app industries (connected to priced products)','Value':app_edges['end'].nunique()},
+        {'Panel':'A. Node coverage','Statistic':'DataProduct nodes in the final priced sample','Value':len(priced_ids)},
+        {'Panel':'A. Node coverage','Statistic':'Supplier nodes connected to final-sample DataProduct nodes','Value':priced_dp['supplier'].nunique()},
+        {'Panel':'A. Node coverage','Statistic':'src_IndustryCategory nodes connected to final-sample DataProduct nodes','Value':src_edges['start'].nunique()},
+        {'Panel':'A. Node coverage','Statistic':'app_IndustryCategory nodes connected to final-sample DataProduct nodes','Value':app_edges['end'].nunique()},
         {'Panel':'B. Edge coverage','Statistic':'Triples: provide_data','Value':len(provide)},
         {'Panel':'B. Edge coverage','Statistic':'Triples: source_industry','Value':len(src_edges)},
         {'Panel':'B. Edge coverage','Statistic':'Triples: applied_to','Value':len(app_edges)},
